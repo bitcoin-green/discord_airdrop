@@ -1,0 +1,14 @@
+{
+    "title": "BitGreen",
+    "url": "https://bitg.org",
+    "thumbnail": "https://i.imgur.com/tTm8HtR.png",
+    "ann_channel": 603721386082566144,
+    "priv_channel": "",
+    "priv_role": "",
+    "airdrop": "./data/current-airdrop.json",
+    "sent": "./data/persistent-sent.json",
+    "twitter": "./data/twitter-auth.json",
+    "self_path": "./config/setup.json",
+    "interactions": 10,
+    "msg_activity_log": "./data/message_activity_24hr.json"
+}
