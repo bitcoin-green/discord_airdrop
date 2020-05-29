@@ -1,11 +1,12 @@
 
+
 # discord_airdrop
 Distribute coins within Discord
 
 Minimum environment:
 - **Ubuntu 18.04+**  
 - 1 vCore  
-- 1024mb RAM  
+- 1024MB RAM  
 
 ## Setup swap file  
 ```bash
