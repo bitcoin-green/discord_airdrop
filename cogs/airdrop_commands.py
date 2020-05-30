@@ -268,7 +268,6 @@ class Airdrop_commands(commands.Cog):
         embed.add_field(name="Receive", value=f"{airdropConf['amount']} {self.wallet['ticker']} each", inline=True)
         await ctx.send(embed=embed)
 
-    # Check if a single user has received $received @N4dro#1234
     # v1.0 changes made
     @commands.command()
     @commands.has_any_role(*roles)
@@ -317,7 +316,7 @@ class Airdrop_commands(commands.Cog):
                                     rpc_json.addParticipant(user['address'], airdrop_config['amount'])
 
                             # TWITTER_BOUNTY = TRUE
-                            # end aaccordingly...
+                            # end accordingly...
                             if len(data['airdrop-users']) == 0 and data['twitter-bounty']:
                                 cron.disable_batch_airdrop()
                                 embed = discord.Embed(color=self.color, timestamp=datetime.utcnow())
