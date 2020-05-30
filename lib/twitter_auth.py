@@ -9,8 +9,8 @@ class TwitterAuth():
         self.auth.set_access_token(thrdPartyAuthConfig['twitter-access'], thrdPartyAuthConfig['twitter-token'])
         self.api = tweepy.API(self.auth, wait_on_rate_limit=True, parser=tweepy.parsers.JSONParser())
 
-##########################################################
-## GET FUNCTIONS #########################################
+    ##########################################################
+    ## GET FUNCTIONS #########################################
     # get details by twitter id: 00112233445566
     def getUserById(self, id):
         try:
@@ -67,8 +67,8 @@ class TwitterAuth():
             print (f"[!] error captured: {error.api_code}")
             pass
 
-##########################################################
-## POST FUNCTIONS ########################################
+    ##########################################################
+    ## POST FUNCTIONS ########################################
     # return date of when the account was created
     def creation_date(self, handle):
         return self.getUserByName(handle)['created_at']
@@ -88,7 +88,7 @@ class TwitterAuth():
                             "recipient_id": twitter_id
                         },
                         "message_data": {
-                            "text": ':: 2FA verification ::\n' + uid + ' \n\nReturn to discord and verify your account by typing the following: $verify <2fa-code>\n\n:: Example ::\n$verify 8daa2197662448bdbeef494561ed2e9e'
+                            "text": '🍃 2FA verification 🌳\n' + uid + ' \n\nPlease copy the 2FA verification command and submit on Discord.\n\n$verify ' + uid
                         }
                     }
                 }

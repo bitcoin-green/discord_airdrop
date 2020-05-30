@@ -6,5 +6,5 @@
     "airdrop": "./data/current-airdrop.json",
     "sent": "./data/persistent-sent.json",
     "twitter": "./data/twitter-auth.json",
-    "self_path": "./config/setup.json",
+    "self_path": "./config/setup.json"
 }
