@@ -17,7 +17,7 @@ def create_cronjob():
             break
 
     if 'automated_airdrop' not in f'{line}'.strip():
-        job = cron.new(command='/usr/bin/python3 ~/airdrop-prod/automated_airdrop.py',
+        job = cron.new(command='/usr/bin/python3 ~/discord_airdrop/automated_airdrop.py',
                        comment='automated_airdrop')
         job.hour.every(3)
         job.minute.on(0)
