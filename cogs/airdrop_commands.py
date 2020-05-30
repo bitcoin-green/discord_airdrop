@@ -20,7 +20,6 @@ class Airdrop_commands(commands.Cog):
 
         # discord channel(s)
         self.channel = self.bot.get_channel(self.config['ann_channel'])
-        self.private = self.bot.get_channel(self.config['priv_channel'])
 
         # interface
         self.color = 0x1e7180
@@ -67,7 +66,6 @@ class Airdrop_commands(commands.Cog):
         airdropConf = utility.load_json(self.config['airdrop'])                    # currently joined
         registered_users = utility.load_json(self.config['twitter'])               # authenticated users
         received = utility.load_json(self.config['sent'])                          # batch complete users
-        message_activity = utility.load_json(self.config['msg_activity_log'])      # message activity
 
         if airdropConf['active']:
             airdrop_user_size = airdropConf
@@ -157,47 +155,23 @@ class Airdrop_commands(commands.Cog):
                                 if self.twitter_auth.getFriendship(registered_users['airdrop-users'][tmp_ids.index(str(ctx.message.author.id))][str(str(ctx.message.author.id))][0]['twitter'][0]['twitter-id'], self.twitter['screen-name']):
                                     if airdropConf['twitter-bounty']:
                                         if self.twitter_auth.timeline_retweets(registered_users['airdrop-users'][tmp_ids.index(str(ctx.message.author.id))][str(str(ctx.message.author.id))][0]['twitter'][0]['twitter-id']):
-                                            if not airdropConf['is-private']:
-                                                # public airdrop
-                                                airdropConf['airdrop-users'].append(({'discord-id': str(ctx.message.author.id), 'address': address}))
-                                                update_data = json.dumps(airdropConf)
-                                                utility.jsonfile(self.config['airdrop'], update_data)                                                                             # '<https://twitter.com/%s/status/%s>' % (self.twitter['screen-name'], self.twitter['retweet-id'])
-                                                embed = discord.Embed(color=self.color,
-                                                                      title=self.config['title'], url=self.config['url'],
-                                                                      description=f"<@{ctx.message.author.id}> has joined the bounty airdrop to receive **{airdropConf['amount']}** {self.wallet['ticker']}. Coins are sent in batches (see below for next batch payout).",
-                                                                      timestamp=datetime.utcnow())
-                                                embed.set_thumbnail(url=self.config['thumbnail'])
-                                                embed.set_author(name="Successfully joined!", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                                embed.add_field(name="Retweet",
-                                                                value=f"<https://twitter.com/{self.twitter['screen-name']}/status/{self.twitter['retweet-id']}>", inline=True)
-                                                embed.add_field(name="Next batch payout", value=f"{cron.schedule()}", inline=True)
-                                                embed.set_footer(text="An airdrop is taking place, type $join <wallet-address> to participate.")
-                                                await self.channel.send(embed=embed)
-                                            else:
-                                                # private airdrop
-                                                if self.config['priv_role'] in [role.name for role in ctx.message.author.roles]:
-                                                    airdropConf['airdrop-users'].append(({'discord-id': str(ctx.message.author.id), 'address': address}))
-                                                    update_data = json.dumps(airdropConf)
-                                                    utility.jsonfile(self.config['airdrop'], update_data)
-                                                    embed = discord.Embed(color=self.color,
-                                                                          title=self.config['title'],
-                                                                          url=self.config['url'],
-                                                                          description=f"<@{ctx.message.author.id}> has joined the bounty airdrop to receive **{airdropConf['amount']}** {self.wallet['ticker']}. Coins are sent in batches (see below for next batch payout).",
-                                                                          timestamp=datetime.utcnow())
-                                                    embed.set_thumbnail(url=self.config['thumbnail'])
-                                                    embed.set_author(name="Successfully joined!", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                                    embed.add_field(name="Next batch payout", value=f"{cron.schedule()}", inline=True)
-                                                    embed.set_footer(text="An airdrop is taking place, type $join <wallet-address> to participate.")
-                                                    await self.private.send(embed=embed)
-                                                else:
-                                                    embed = discord.Embed(color=self.error,
-                                                                          title=self.config['title'],
-                                                                          url=self.config['url'],
-                                                                          description='Airdrop is set to private.',
-                                                                          timestamp=datetime.utcnow())
-                                                    embed.set_thumbnail(url=self.config['thumbnail'])
-                                                    embed.set_author(name="An error has occurred...", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                                    await ctx.author.send(embed=embed)
+
+                                            # public airdrop
+                                            airdropConf['airdrop-users'].append(({'discord-id': str(ctx.message.author.id), 'address': address}))
+                                            update_data = json.dumps(airdropConf)
+                                            utility.jsonfile(self.config['airdrop'], update_data)                                                                             # '<https://twitter.com/%s/status/%s>' % (self.twitter['screen-name'], self.twitter['retweet-id'])
+                                            embed = discord.Embed(color=self.color,
+                                                                  title=self.config['title'], url=self.config['url'],
+                                                                  description=f"<@{ctx.message.author.id}> has joined the bounty airdrop to receive **{airdropConf['amount']}** {self.wallet['ticker']}. Coins are sent in batches (see below for next batch payout).",
+                                                                  timestamp=datetime.utcnow())
+                                            embed.set_thumbnail(url=self.config['thumbnail'])
+                                            embed.set_author(name="Successfully joined!", icon_url="https://i.imgur.com/SjUnyZW.png")
+                                            embed.add_field(name="Retweet",
+                                                            value=f"<https://twitter.com/{self.twitter['screen-name']}/status/{self.twitter['retweet-id']}>", inline=True)
+                                            embed.add_field(name="Next batch payout", value=f"{cron.schedule()}", inline=True)
+                                            embed.set_footer(text="An airdrop is taking place, type $join <wallet-address> to participate.")
+                                            await self.channel.send(embed=embed)
+
                                         else:
                                             embed = discord.Embed(color=self.error,
                                                                   title=self.config['title'],
@@ -209,64 +183,21 @@ class Airdrop_commands(commands.Cog):
                                             embed.set_thumbnail(url=self.config['thumbnail'])
                                             embed.set_author(name="One last step...", icon_url="https://i.imgur.com/SjUnyZW.png")
                                             await ctx.author.send(embed=embed)
-
                                     else:
+                                        # non-twitter bounty
+                                        airdropConf['airdrop-users'].append(({'discord-id': str(ctx.message.author.id), 'address': address}))
+                                        update_data = json.dumps(airdropConf)
+                                        utility.jsonfile(self.config['airdrop'], update_data)
+                                        embed = discord.Embed(color=self.color,
+                                                              title=self.config['title'],
+                                                              url=self.config['url'],
+                                                              description=f"<@{ctx.message.author.id}> has entered the airdrop to receive **{airdropConf['amount']}** {self.wallet['ticker']}, **{airdropConf['max-users'] - len(airdrop_user_size['airdrop-users'])}** slots available.",
+                                                              timestamp=datetime.utcnow())
+                                        embed.set_thumbnail(url=self.config['thumbnail'])
+                                        embed.set_author(name="Successfully joined!", icon_url="https://i.imgur.com/SjUnyZW.png")
+                                        embed.set_footer(text="An airdrop is taking place, type $join <wallet-address> to participate.")
+                                        await self.channel.send(embed=embed)
 
-                                        # iterate through messages_activity_24hrs.json and add to list.
-                                        for i in range(0, len(message_activity['discord-user'])):
-                                            for id in message_activity['discord-user'][i].keys():
-                                                active_ids.append(id)
-
-                                        # check if the user has communicated >= 10 times in the last 24hrs.
-                                        if not str(ctx.author.id) in active_ids or message_activity['discord-user'][active_ids.index(str(ctx.message.author.id))][str(ctx.message.author.id)][0]['messages'] < self.config['interactions']:
-                                            embed = discord.Embed(color=self.error,
-                                                                  title=self.config['title'],
-                                                                  url=self.config['url'],
-                                                                  description="You must be more active within Discord to participate in the airdrops.")
-                                            embed.set_thumbnail(url=self.config['thumbnail'])
-                                            embed.set_author(name="An error has occurred...",
-                                                             icon_url="https://i.imgur.com/SjUnyZW.png")
-                                            await ctx.author.send(embed=embed)
-                                            return
-
-                                        if not airdropConf['is-private']:
-                                            # public airdrop
-                                            airdropConf['airdrop-users'].append(({'discord-id': str(ctx.message.author.id), 'address': address}))
-                                            update_data = json.dumps(airdropConf)
-                                            utility.jsonfile(self.config['airdrop'], update_data)
-                                            embed = discord.Embed(color=self.color,
-                                                                  title=self.config['title'],
-                                                                  url=self.config['url'],
-                                                                  description=f"<@{ctx.message.author.id}> has entered the airdrop to receive **{airdropConf['amount']}** {self.wallet['ticker']}, **{airdropConf['max-users'] - len(airdrop_user_size['airdrop-users'])}** slots available.",
-                                                                  timestamp=datetime.utcnow())
-                                            embed.set_thumbnail(url=self.config['thumbnail'])
-                                            embed.set_author(name="Successfully joined!", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                            embed.set_footer(text="An airdrop is taking place, type $join <wallet-address> to participate.")
-                                            await self.channel.send(embed=embed)
-                                        else:
-                                            if self.config['priv_role'] in [role.name for role in ctx.message.author.roles]:
-                                                # private airdrop
-                                                airdropConf['airdrop-users'].append(({'discord-id': str(ctx.message.author.id), 'address': address}))
-                                                update_data = json.dumps(airdropConf)
-                                                utility.jsonfile(self.config['airdrop'], update_data)
-                                                embed = discord.Embed(color=self.color,
-                                                                      title=self.config['title'],
-                                                                      url=self.config['url'],
-                                                                      description=f"<@{ctx.message.author.id}> has entered the airdrop to receive **{airdropConf['amount']}** {self.wallet['ticker']}, **{airdropConf['max-users'] - len(airdrop_user_size['airdrop-users'])}** slots available.",
-                                                                      timestamp=datetime.utcnow())
-                                                embed.set_thumbnail(url=self.config['thumbnail'])
-                                                embed.set_author(name="Successfully joined!", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                                embed.set_footer(text="An airdrop is taking place, type $join <wallet-address> to participate.")
-                                                await self.private.send(embed=embed)
-                                            else:
-                                                embed = discord.Embed(color=self.error,
-                                                                      title=self.config['title'],
-                                                                      url=self.config['url'],
-                                                                      description=f"<@{ctx.message.author.id}> Unfortunately this airdrop is for private users.",
-                                                                      timestamp=datetime.utcnow())
-                                                embed.set_thumbnail(url=self.config['thumbnail'])
-                                                embed.set_author(name="An error has occurred...", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                                await ctx.author.send(embed=embed)
                                 else:
                                     embed = discord.Embed(color=self.error,
                                                           title=self.config['title'],
@@ -332,10 +263,9 @@ class Airdrop_commands(commands.Cog):
         embed.set_author(name="Airdrop stats", icon_url="https://i.imgur.com/SjUnyZW.png")
         embed.add_field(name="Active", value=f"``{airdropConf['active']}``", inline=True)
         embed.add_field(name="Twitter bounty", value=f"``{airdropConf['twitter-bounty']}``", inline=True)
-        embed.add_field(name="Private", value=f"``{airdropConf['is-private']}``", inline=True)
-        embed.add_field(name="Retweet ID", value=f"``{self.twitter['retweet-id']}``", inline=True)
-        embed.add_field(name="Receive", value=f"{airdropConf['amount']} {self.wallet['ticker']} each", inline=True)
+        embed.add_field(name="Retweet ID", value=f"``{self.twitter['retweet-id']}``", inline=False)
         embed.add_field(name="Users awaiting payment", value=f"{len(airdropConf['airdrop-users'])}", inline=True)
+        embed.add_field(name="Receive", value=f"{airdropConf['amount']} {self.wallet['ticker']} each", inline=True)
         await ctx.send(embed=embed)
 
     # Check if a single user has received $received @N4dro#1234
@@ -398,7 +328,7 @@ class Airdrop_commands(commands.Cog):
                                 await ctx.send(embed=embed)
 
                                 remake_sent = {'sent': []}
-                                remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False, 'twitter-bounty': False, 'is-private': False}
+                                remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False, 'twitter-bounty': False}
 
                                 make_sent = json.dumps(remake_sent, indent=4)
                                 make_airdrop = json.dumps(remake_airdrop, indent=4)
@@ -422,7 +352,7 @@ class Airdrop_commands(commands.Cog):
                                 await ctx.send(embed=embed)
 
                                 remake_sent = {'sent': []}
-                                remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False, 'twitter-bounty': False, 'is-private': False}
+                                remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False, 'twitter-bounty': False}
 
                                 make_sent = json.dumps(remake_sent, indent=4)
                                 make_airdrop = json.dumps(remake_airdrop, indent=4)
@@ -446,7 +376,7 @@ class Airdrop_commands(commands.Cog):
                     # TWITTER_BOUNTY = FALSE
                     # end accordingly...
                     if not airdrop_config['twitter-bounty']:
-                        remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False, 'twitter-bounty': False, 'is-private': False}
+                        remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False, 'twitter-bounty': False}
                         make_airdrop = json.dumps(remake_airdrop, indent=4)
                         utility.jsonfile(self.config['airdrop'], make_airdrop)
 
@@ -479,106 +409,58 @@ class Airdrop_commands(commands.Cog):
 
     @commands.command()
     @commands.has_any_role(*roles)
-    async def airdrop(self, ctx, participants, cAmount, twitter_bounty: int=0, isPrivate: int=0):
+    async def airdrop(self, ctx, participants, cAmount, twitter_bounty: int=0):
         if not utility.load_json(self.config['airdrop'])['active']:
             try:
                 # convert arguments to int, float
                 participants = int(participants)
                 cAmount = float(cAmount)
 
-                if twitter_bounty or isPrivate <= 1:
-                    if cAmount > 0:
-                        if not isPrivate:
-                            if twitter_bounty:
-                                if len(self.twitter['retweet-id']) <= 0:
-                                    embed = discord.Embed(color=self.error, title=self.config['title'], url=self.config['url'], timestamp=datetime.utcnow())
-                                    embed.set_thumbnail(url=self.config['thumbnail'])
-                                    embed.set_author(name="An error has occurred...", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                    embed.add_field(name="Details", value="You must set a retweet-id before runnning a retweet bounty airdrop.", inline=True)
-                                    await ctx.send(embed=embed)
-                                    return
+                if cAmount > 0:
+                    if twitter_bounty:
+                        if len(self.twitter['retweet-id']) <= 0:
+                            embed = discord.Embed(color=self.error, title=self.config['title'], url=self.config['url'], timestamp=datetime.utcnow())
+                            embed.set_thumbnail(url=self.config['thumbnail'])
+                            embed.set_author(name="An error has occurred...", icon_url="https://i.imgur.com/SjUnyZW.png")
+                            embed.add_field(name="Details", value="You must set a retweet-id before runnning a retweet bounty airdrop.", inline=True)
+                            await ctx.send(embed=embed)
+                            return
 
-                                cron.enable_batch_airdrop()
-                                create_json = {'airdrop-users': [], 'max-users': int(participants), 'amount': float(cAmount), 'active': True, 'twitter-bounty': True, 'is-private': False}
-                                make_json = json.dumps(create_json, indent=4)
-                                utility.jsonfile(self.config['airdrop'], make_json)
+                        cron.enable_batch_airdrop()
+                        create_json = {'airdrop-users': [], 'max-users': int(participants), 'amount': float(cAmount), 'active': True, 'twitter-bounty': True}
+                        make_json = json.dumps(create_json, indent=4)
+                        utility.jsonfile(self.config['airdrop'], make_json)
 
-                                embed = discord.Embed(color=self.color, title=self.config['title'], url=self.config['url'], description='A twitter bounty has been activated! Retweet the URL before joining\n <https://twitter.com/%s/status/%s>' % (self.twitter['screen-name'], self.twitter['retweet-id']))
-                                embed.set_thumbnail(url=self.config['thumbnail'])
-                                embed.set_author(name="Airdrop in progress", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                embed.add_field(name="Information", value="Type ``$join <wallet-address>`` to participate.\n\nUsers that join enter a pool that will automatically payout. During the twitter bounty you can only join/receive once.", inline=False)
-                                embed.add_field(name="Next payout", value=f"{cron.schedule()}", inline=True)
-                                embed.add_field(name="Amount", value=f"{cAmount} {self.wallet['ticker']} each", inline=True)
-                                embed.set_footer(text="Please also check #airdrop-guidance for help registering.")
-                                await self.channel.send(embed=embed)
-                            else:
-                                create_json = {'airdrop-users': [], 'max-users': int(participants),'amount': float(cAmount), 'active': True, 'twitter-bounty': False,'is-private': False}
-                                make_json = json.dumps(create_json, indent=4)
-                                utility.jsonfile(self.config['airdrop'], make_json)
-
-                                embed = discord.Embed(color=self.color,
-                                                      title=self.config['title'],
-                                                      url=self.config['url'],
-                                                      description="An airdrop is taking place, type ``$join <wallet-address>`` to participate.")
-                                embed.set_thumbnail(url=self.config['thumbnail'])
-                                embed.set_author(name="Airdrop in progress", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                embed.add_field(name="Available slots", value=f"{participants}", inline=True)
-                                embed.add_field(name="Amount", value=f"{cAmount} {self.wallet['ticker']} each", inline=True)
-                                embed.set_footer(text="Please also check #airdrop-guidance for help registering.")
-                                await self.channel.send(embed=embed)
-
-                        elif isPrivate:
-                            if self.config['priv_channel'] != "":
-                                if twitter-bounty:
-                                    cron.enable_batch_airdrop()
-                                    create_json = {'airdrop-users': [], 'max-users': int(participants),'amount': float(cAmount), 'active': True, 'twitter-bounty': True,'is-private': True}
-                                    make_json = json.dumps(create_json, indent=4)
-                                    utility.jsonfile(self.config['airdrop'], make_json)
-
-                                    embed = discord.Embed(color=self.color,
-                                                          title=self.config['title'],
-                                                          url=self.config['url'],
-                                                          description='A private twitter bounty has been activated! Type ``$join <wallet-address>`` to participate.\n\nCoins are sent in batches (see below for next batch payout). During the twitter bounty you can only join/receive once.')
-                                    embed.set_thumbnail(url=self.config['thumbnail'])
-                                    embed.set_author(name="Airdrop in progress", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                    embed.add_field(name="Required role", value=f"{self.config['priv_role']}", inline=True)
-                                    embed.add_field(name="Next payout", value=f"{cron.schedule()}", inline=True)
-                                    embed.add_field(name="Amount", value=f"{cAmount} {self.wallet['ticker']} each", inline=True)
-                                    embed.set_footer(text="Please also check #airdrop-guidance for help registering.")
-                                    await self.private.send(embed=embed)
-                                else:
-                                    create_json = {'airdrop-users': [], 'max-users': int(participants), 'amount': float(cAmount), 'active': True, 'twitter-bounty': False, 'is-private': True}
-                                    make_json = json.dumps(create_json, indent=4)
-                                    utility.jsonfile(self.config['airdrop'], make_json)
-
-                                    embed = discord.Embed(color=self.color, title=self.config['title'],url=self.config['url'], description='An airdrop is taking place, type ``$join <wallet-address>`` to participate.')
-                                    embed.set_thumbnail(url=self.config['thumbnail'])
-                                    embed.set_author(name="Airdrop in progress", icon_url="https://i.imgur.com/SjUnyZW.png")
-                                    embed.add_field(name="Available slots", value=f"{participants}", inline=True)
-                                    embed.add_field(name="Amount", value=f"{cAmount} {self.wallet['ticker']} each", inline=True)
-                                    embed.set_footer(text="Please also check #airdrop-guidance for help registering.")
-                                    await self.private.send(embed=embed)
-                            else:
-                                embed = discord.Embed(color=self.color,
-                                                      title=self.config['title'],
-                                                      url=self.config['url'],
-                                                      description="You need to set a private channel.",
-                                                      timestamp=datetime.utcnow())
-                                embed.set_thumbnail(url=self.config['thumbnail'])
-                                embed.add_field(name="guide", value="``$priv <channel-id>``", inline=True)
-                                await self.channel.send(embed=embed)
-                    else:
-                        embed = discord.Embed(color=self.error, title=self.config['title'], url=self.config['url'], timestamp=datetime.utcnow())
+                        embed = discord.Embed(color=self.color, title=self.config['title'], url=self.config['url'], description='A twitter bounty has been activated! Retweet the URL before joining\n <https://twitter.com/%s/status/%s>' % (self.twitter['screen-name'], self.twitter['retweet-id']))
                         embed.set_thumbnail(url=self.config['thumbnail'])
-                        embed.set_author(name="An error has occurred...", icon_url="https://i.imgur.com/SjUnyZW.png")
-                        embed.add_field(name='Details', value="You must enter a number grater than zero.", inline=True)
+                        embed.set_author(name="Airdrop in progress", icon_url="https://i.imgur.com/SjUnyZW.png")
+                        embed.add_field(name="Information", value="Type ``$join <wallet-address>`` to participate.\n\nUsers that join enter a pool that will automatically payout. During the twitter bounty you can only join/receive once.", inline=False)
+                        embed.add_field(name="Next payout", value=f"{cron.schedule()}", inline=True)
+                        embed.add_field(name="Amount", value=f"{cAmount} {self.wallet['ticker']} each", inline=True)
+                        embed.set_footer(text="Please also check #airdrop-guidance for help registering.")
+                        await self.channel.send(embed=embed)
+                    else:
+                        create_json = {'airdrop-users': [], 'max-users': int(participants),'amount': float(cAmount), 'active': True, 'twitter-bounty': False}
+                        make_json = json.dumps(create_json, indent=4)
+                        utility.jsonfile(self.config['airdrop'], make_json)
+
+                        embed = discord.Embed(color=self.color,
+                                              title=self.config['title'],
+                                              url=self.config['url'],
+                                              description="An airdrop is taking place, type ``$join <wallet-address>`` to participate.")
+                        embed.set_thumbnail(url=self.config['thumbnail'])
+                        embed.set_author(name="Airdrop in progress", icon_url="https://i.imgur.com/SjUnyZW.png")
+                        embed.add_field(name="Available slots", value=f"{participants}", inline=True)
+                        embed.add_field(name="Amount", value=f"{cAmount} {self.wallet['ticker']} each", inline=True)
+                        embed.set_footer(text="Please also check #airdrop-guidance for help registering.")
                         await self.channel.send(embed=embed)
                 else:
                     embed = discord.Embed(color=self.error, title=self.config['title'], url=self.config['url'], timestamp=datetime.utcnow())
                     embed.set_thumbnail(url=self.config['thumbnail'])
-                    embed.set_author(name='An error has occurred...', icon_url="https://i.imgur.com/SjUnyZW.png")
-                    embed.add_field(name="Argument error", value="When specifying if the airdrop is twitter-bounty or private the argument must be True or False. e.g.\n``$airdrop <participants> <amount> <twitter-bounty> <isPrivate>``\n``$airdrop 25 1 1 0``", inline=True)
+                    embed.set_author(name="An error has occurred...", icon_url="https://i.imgur.com/SjUnyZW.png")
+                    embed.add_field(name='Details', value="You must enter a number grater than zero.", inline=True)
                     await self.channel.send(embed=embed)
+
 
             except ValueError:
                 embed = discord.Embed(color=self.error, title=self.config['title'], url=self.config['url'], timestamp=datetime.utcnow())
@@ -638,7 +520,7 @@ class Airdrop_commands(commands.Cog):
                             embed.add_field(name="received", value=f"{data['amount']} {self.wallet['ticker']} each", inline=True)
                             await self.channel.send(embed=embed)
 
-                        remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False,'twitter-bounty': False, 'is-private': False}
+                        remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False,'twitter-bounty': False}
                         make_json = json.dumps(remake_airdrop, indent=4)
                         utility.jsonfile(self.config['airdrop'], make_json)
 
@@ -680,7 +562,7 @@ class Airdrop_commands(commands.Cog):
         embed2.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
         embed2.set_author(name="Airdrop commands", icon_url="https://i.imgur.com/SjUnyZW.png")
         embed2.add_field(name="command", value="$getinfo\n$airdrop\n$end\n$getbalance\n$confirm\n$send\n$set_retweet\n$next_payout", inline=True)
-        embed2.add_field(name="description", value="general wallet info\nstart airdrop\nend airdrop\nbot balance\nshow confirmations\nsend aidrop\nset private channel\nset retweet status\nshow next payout", inline=True)
+        embed2.add_field(name="description", value="general wallet info\nstart airdrop\nend airdrop\nbot balance\nshow confirmations\nsend aidrop\nset retweet status\nshow next payout", inline=True)
 
         await ctx.send(embed=embed2)
         await ctx.send(embed=embed1)
@@ -723,11 +605,9 @@ class Airdrop_commands(commands.Cog):
             # icon created by: https://www.flaticon.com/authors/icongeek26
             embed.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
             embed.set_author(name="Airdrop usage", icon_url="https://i.imgur.com/SjUnyZW.png")
-            embed.add_field(name="Arguments", value="`$airdrop {participants} {amount} {twitter-bounty} {private}`", inline=False)
-            embed.add_field(name="Normal", value="`$airdrop 25 1`", inline=True)
+            embed.add_field(name="Arguments", value="`$airdrop {participants} {amount} {twitter-bounty}`", inline=False)
+            embed.add_field(name="Normal", value="`$airdrop 25 1 0`", inline=True)
             embed.add_field(name="Twitter bounty", value="`$airdrop 0 1 1`", inline=True)
-            embed.add_field(name="Normal (private)", value="`$airdrop 25 1 0 1`", inline=True)
-            embed.add_field(name="Twitter bounty (private)", value="`$airdrop 0 1 1 1`", inline=True)
             await ctx.send(embed=embed)
 
     @join.error
