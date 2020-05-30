@@ -679,25 +679,11 @@ class Airdrop_commands(commands.Cog):
 
         embed2.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
         embed2.set_author(name="Airdrop commands", icon_url="https://i.imgur.com/SjUnyZW.png")
-        embed2.add_field(name="command", value="$getinfo\n$airdrop\n$end\n$getbalance\n$confirm\n$send\n$set_priv\n$set_retweet\n$next_payout", inline=True)
+        embed2.add_field(name="command", value="$getinfo\n$airdrop\n$end\n$getbalance\n$confirm\n$send\n$set_retweet\n$next_payout", inline=True)
         embed2.add_field(name="description", value="general wallet info\nstart airdrop\nend airdrop\nbot balance\nshow confirmations\nsend aidrop\nset private channel\nset retweet status\nshow next payout", inline=True)
 
         await ctx.send(embed=embed2)
         await ctx.send(embed=embed1)
-
-    # v1.0 changes made
-    @commands.command()
-    @commands.has_any_role(*roles)
-    async def set_priv(self,ctx, id: str):
-        self.config['priv_channel'] = id
-        update_config = json.dumps(self.config)
-        utility.jsonfile(self.config['self_path'], update_config)
-
-        embed = discord.Embed(color=self.color, title=self.config['title'], url=self.config['url'], timestamp=datetime.utcnow())
-        embed.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
-        embed.set_author(name="Updating private channel", icon_url="https://i.imgur.com/SjUnyZW.png")
-        embed.add_field(name="Complete!", value=f"private channel has been set to {id}", inline=True)
-        await ctx.send(embed=embed)
 
     # v1.0 changes made
     @commands.command()
@@ -771,15 +757,6 @@ class Airdrop_commands(commands.Cog):
             embed.set_author(name="Retweet-id not specified", icon_url="https://i.imgur.com/SjUnyZW.png")
             embed.add_field(name="Information", value="Open the retweet on any browser. The URL should display something similar as shown below.\n<https://twitter.com/TwitterAPI/status/1128358947772145672>", inline=False)
             embed.add_field(name="command", value="`$set_retweet 1128358947772145672`", inline=True)
-            await ctx.send(embed=embed)
-
-    @set_priv.error
-    async def set_priv_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed = discord.Embed(color=self.error)
-            embed.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
-            embed.set_author(name="Channel not specified", icon_url="https://i.imgur.com/SjUnyZW.png")
-            embed.add_field(name="Command", value="`$set_priv 499870518049112065`", inline=True)
             await ctx.send(embed=embed)
 
 def setup(bot):
