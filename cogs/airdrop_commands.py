@@ -732,7 +732,7 @@ class Airdrop_commands(commands.Cog):
     @airdrop.error
     async def airdrop_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            embed = discord.Embed(color=self.error)#
+            embed = discord.Embed(color=self.error)
 
             # icon created by: https://www.flaticon.com/authors/icongeek26
             embed.set_thumbnail(url="https://i.imgur.com/opisfz2.png")

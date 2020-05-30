@@ -1,5 +1,5 @@
-from discord.ext import commands
 import lib.cron as cron
+from discord.ext import commands
 import lib.utility_func as utility_func
 
 roles = utility_func.load_json('./config/roles.json')['discord-roles']
@@ -14,17 +14,17 @@ class cronJob_commands(commands.Cog):
 
     @commands.command()
     @commands.has_any_role(*roles)
-    async def setup_batch_cron(self, ctx):
+    async def setup_batch_cron(self):
         cron.create_cronjob()
 
     @commands.command()
     @commands.has_any_role(*roles)
-    async def enable_batch_airdrop(self, ctx):
+    async def enable_batch_airdrop(self):
         cron.enable_batch_airdrop()
 
     @commands.command()
     @commands.has_any_role(*roles)
-    async def disable_batch_airdrop(self, ctx):
+    async def disable_batch_airdrop(self):
         cron.disable_batch_airdrop()
 
 def setup(bot):
