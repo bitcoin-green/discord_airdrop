@@ -14,17 +14,17 @@ class cronJob_commands(commands.Cog):
 
     @commands.command()
     @commands.has_any_role(*roles)
-    async def setup_batch_cron(self):
+    async def setup_batch_cron(self, ctx):
         cron.create_cronjob()
 
     @commands.command()
     @commands.has_any_role(*roles)
-    async def enable_batch_airdrop(self):
+    async def enable_batch_airdrop(self, ctx):
         cron.enable_batch_airdrop()
 
     @commands.command()
     @commands.has_any_role(*roles)
-    async def disable_batch_airdrop(self):
+    async def disable_batch_airdrop(self, ctx):
         cron.disable_batch_airdrop()
 
 def setup(bot):
