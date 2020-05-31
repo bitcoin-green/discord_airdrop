@@ -52,5 +52,4 @@ class task():
         else:
             print ("Airdrop isn't persistent.")
 
-
 task().batch_airdrop()
