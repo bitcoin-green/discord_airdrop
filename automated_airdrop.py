@@ -7,17 +7,17 @@ import lib.utility_func as utility_func
 
 class task():
     def __init__(self):
-        self.relative_path = os.path.dirname(os.path.abspath(__file__))
-        self.config = utility_func.load_json('%s/config/setup.json' % (self.relative_path))
-        self.sent = utility_func.load_json('%s/data/persistent-sent.json' % (self.relative_path))
-        self.airdropConf = utility_func.load_json('%s/data/current-airdrop.json' % (self.relative_path))
-        self.wallet = utility_func.load_json('%s/config/wallet-config.json' % (self.relative_path))
-        self.batch_log = '%s/batch-log.txt' % (self.relative_path)
+        self.relative_path  = os.path.dirname(os.path.abspath(__file__))
+        self.config         = utility_func.load_json(f'{self.relative_path}/config/setup.json')
+        self.sent           = utility_func.load_json(f'{self.relative_path}/data/persistent-sent.json')
+        self.airdropConf    = utility_func.load_json(f'{self.relative_path}/data/current-airdrop.json')
+        self.wallet         = utility_func.load_json(f'{self.relative_path}/config/wallet-config.json')
+        self.batch_log      = f'{self.relative_path}/batch-log.txt'
 
     # debugging; log time each batch task has been completed
     def task_logging(self):
         batch_log = open(self.batch_log, 'a')
-        batch_log.write('[%s] - Batch airdrop complete!\n' % (datetime.now()))
+        batch_log.write(f'[{datetime.now()}] - Batch airdrop complete!\n')
 
     def batch_airdrop(self):
         if self.airdropConf['twitter-bounty']:
