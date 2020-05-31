@@ -2,14 +2,14 @@ from bitcoinrpc.authproxy import AuthServiceProxy
 
 recipients = {}
 
-class Rpc(object):
+class wallet_rpc(object):
     def connect(self):
         try:
             return AuthServiceProxy("http://%s:%s@127.0.0.1:8331" % ('discordairdrop1', 'discordairdrop1'),timeout=120)
         except BrokenPipeError:
             return AuthServiceProxy("http://%s:%s@127.0.0.1:8331" % ('discordairdrop1', 'discordairdrop1'), timeout=120)
 
-rpc = Rpc()
+wallet = wallet_rpc()
 
 # add participant to the airdrop.
 def addParticipant(address, amount):
@@ -17,40 +17,60 @@ def addParticipant(address, amount):
 
 # validate the address a user gives is valid and not invalid.
 def validateaddress(address):
-    return rpc.connect().validateaddress(address)
-
+    try:
+        return wallet.connect().validateaddress(address)
+    except Exception as rpc_error:
+        return rpc_error
+    
 def getinfo():
-    return rpc.connect().getblockchaininfo()
+    try:
+        return wallet.connect().getblockchaininfo()
+    except Exception as rpc_error:
+        return rpc_error
 
 # total amount of blocks
 def getTotalBlocks():
-    return rpc.connect().getblockcount()
+    try:
+        return wallet.connect().getblockcount()
+    except Exception as rpc_error:
+        return rpc_error
 
 # get wallet balance
 def getBalance():
-    return rpc.connect().getbalance()
+    try:
+        return wallet.connect().getbalance()
+    except Exception as rpc_error:
+        return rpc_error
 
 # get wallet address
 def getAddress():
-    return rpc.connect().getnewaddress()
+    try:
+        return wallet.connect().getnewaddress()
+    except Exception as rpc_error:
+        return rpc_error
 
 # check confirmations
 def txConfirmation():
-    last_confirmed_tx = len(rpc.connect().listtransactions()) - 1
-    return rpc.connect().listtransactions()[last_confirmed_tx]['confirmations']
+    try:
+        last_confirmed_tx = len(wallet.connect().listtransactions()) - 1
+        return wallet.connect().listtransactions()[last_confirmed_tx]['confirmations']
+    except Exception as rpc_error:
+        return rpc_error
 
 # get transaction id that awaits confirmation
 def txId():
-    last_confirmed_tx = len(rpc.connect().listtransactions()) - 1
-    return rpc.connect().listtransactions()[last_confirmed_tx]['txid']
-
-# check confirmations
-def test():
-    return rpc.connect().listtransactions('', 1)[0]['confirmations']
+    try:
+        last_confirmed_tx = len(wallet.connect().listtransactions()) - 1
+        return wallet.connect().listtransactions()[last_confirmed_tx]['txid']
+    except Exception as rpc_error:
+        return rpc_error
 
 # send tokens from account
 def sendCoins():
-    return rpc.connect().sendmany('', recipients, 16)
+    try:
+        return wallet.connect().sendmany('', recipients, 16)
+    except Exception as rpc_error:
+        return rpc_error
 
 # clear recipients
 def clearRecipients():
