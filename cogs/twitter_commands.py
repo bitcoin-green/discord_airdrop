@@ -61,21 +61,21 @@ class Twitter_commands(commands.Cog):
         if utility.check_duplicate(str(ctx.message.author.id), tmp_ids):
             embed = discord.Embed(color=self.error)
             embed.set_thumbnail(url='https://i.imgur.com/opisfz2.png')
-            embed.set_author(name="You have already registered", icon_url="https://i.imgur.com/SjUnyZW.png")
+            embed.set_author(name="You have already registered", icon_url="https://i.imgur.com/o4DuN6L.png")
             embed.add_field(name="Information", value="You can only register one twitter account.", inline=True)
             await ctx.author.send(embed=embed)
         else:
             if self.twitter_auth.getUserByName(handle.lower()) == 50:
                 embed = discord.Embed(color=self.error)
                 embed.set_thumbnail(url='https://i.imgur.com/opisfz2.png')
-                embed.set_author(name="No account found", icon_url="https://i.imgur.com/SjUnyZW.png")
+                embed.set_author(name="No account found", icon_url="https://i.imgur.com/o4DuN6L.png")
                 embed.add_field(name="Information", value="Please check that you have the correct Twitter username.",inline=True)
                 await ctx.author.send(embed=embed)
             else:
                 if utility.check_duplicate(self.twitter_auth.recipient(handle.lower()), tmp_twitter):
                     embed = discord.Embed(color=self.error)
                     embed.set_thumbnail(url='https://i.imgur.com/opisfz2.png')
-                    embed.set_author(name="Account already exists", icon_url="https://i.imgur.com/SjUnyZW.png")
+                    embed.set_author(name="Account already exists", icon_url="https://i.imgur.com/o4DuN6L.png")
                     embed.add_field(name="Information", value="Please check you have the correct Twitter username.", inline=True)
                     await ctx.author.send(embed=embed)
                 else:
@@ -83,7 +83,7 @@ class Twitter_commands(commands.Cog):
                     if d2fa_message == 349:
                         embed = discord.Embed(color=self.error)
                         embed.set_thumbnail(url='https://i.imgur.com/opisfz2.png')
-                        embed.set_author(name="Unable to send 2FA code", icon_url="https://i.imgur.com/SjUnyZW.png")
+                        embed.set_author(name="Unable to send 2FA code", icon_url="https://i.imgur.com/o4DuN6L.png")
                         embed.add_field(name="Instructions", value="""You will need to adjust your privacy settings to receive the 2FA code.
                                                             **1.** Click on the profile on the top right hand side and click on *"Settings and privacy"*.
                                                             **2.** Next on the left hand pane click *"Privacy and safety"*.
@@ -96,7 +96,7 @@ class Twitter_commands(commands.Cog):
                     else:
                         embed = discord.Embed(color=self.color)
                         embed.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
-                        embed.set_author(name="Verification sent", icon_url="https://i.imgur.com/SjUnyZW.png")
+                        embed.set_author(name="Verification sent", icon_url="https://i.imgur.com/o4DuN6L.png")
                         embed.add_field(name="Instructions", value=f"Check your direct messages via Twitter. Once you obtain the verification code, type ``$verify <code>`` to verify that you are the owner of this account. You must also follow {self.twitter['handle']} on Twitter.", inline=True)
                         await ctx.author.send(embed=embed)
 
@@ -143,7 +143,7 @@ class Twitter_commands(commands.Cog):
 
                     embed = discord.Embed(color=self.color)
                     embed.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
-                    embed.set_author(name="Registration complete!", icon_url="https://i.imgur.com/SjUnyZW.png")
+                    embed.set_author(name="Registration complete!", icon_url="https://i.imgur.com/o4DuN6L.png")
                     embed.add_field(name="Information", value="You can now participate in future airdrops on Discord.", inline=True)
                     await ctx.author.send(embed=embed)
 
@@ -179,7 +179,7 @@ class Twitter_commands(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(color=self.error)
             embed.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
-            embed.set_author(name="No argument given", icon_url="https://i.imgur.com/SjUnyZW.png")
+            embed.set_author(name="No argument given", icon_url="https://i.imgur.com/o4DuN6L.png")
             embed.add_field(name="Instructions", value="When registering make sure you use the following format\n``$register n4dro``", inline=True)
             await ctx.author.send(embed=embed)
 
@@ -188,7 +188,7 @@ class Twitter_commands(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(color=self.error)
             embed.set_thumbnail(url="https://i.imgur.com/opisfz2.png")
-            embed.set_author(name="No argument given", icon_url="https://i.imgur.com/SjUnyZW.png")
+            embed.set_author(name="No argument given", icon_url="https://i.imgur.com/o4DuN6L.png")
             embed.add_field(name="Instructions", value="When verifying make sure you use the following format\n``$verify 35204b304795490e8cfca438c2832309``", inline=True)
             await ctx.author.send(embed=embed)
 
