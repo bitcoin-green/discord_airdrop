@@ -1,4 +1,5 @@
 
+
 ![alt text](https://bitg.org/wp-content/uploads/2020/04/bitgreen-logo-full.png)
 
 
@@ -25,6 +26,7 @@ swapon /swapfile
 ## Python libraries
 ```bash
 apt install python3-pip  
+pip3 install python-crontab  
 pip3 install discord.py  
 pip3 install python-dateutil  
 ```
@@ -38,3 +40,10 @@ git clone https://github.com/jgarzik/python-bitcoinrpc.git
 cd python-bitcoinrpc
 python3 setup.py install
 ```
+## Setting up PM2
+```bash
+apt install npm
+npm install pm2 -g
+pm2 start main.py --name airdrop --interpreter=python3
+```
+> All PM2 logs held in *`.pm2\logs`*
