@@ -2,6 +2,7 @@
     "title": "BitGreen",
     "url": "https://bitg.org",
     "thumbnail": "https://i.imgur.com/tTm8HtR.png",
+    "icon": "https://i.imgur.com/o4DuN6L.png",
     "ann_channel": 603721386082566144,
     "airdrop": "./data/current-airdrop.json",
     "sent": "./data/persistent-sent.json",
