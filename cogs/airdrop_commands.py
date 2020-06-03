@@ -258,27 +258,17 @@ class Airdrop_commands(commands.Cog):
     @commands.has_any_role(*roles)
     async def stats(self, ctx):
         airdropConf = utility.load_json(self.config['airdrop'])
+        users_recvd = utility.load_json(self.config['sent'])
+
         embed = discord.Embed(color=self.color)
         embed.set_thumbnail(url=self.config['thumbnail'])
         embed.set_author(name="Airdrop stats", icon_url=self.config['icon'])
         embed.add_field(name="Active", value=f"``{airdropConf['active']}``", inline=True)
         embed.add_field(name="Twitter bounty", value=f"``{airdropConf['twitter-bounty']}``", inline=True)
-        embed.add_field(name="Retweet ID", value=f"``{self.twitter['retweet-id']}``", inline=False)
+        embed.add_field(name="Retweet ID", value=f"``{self.twitter['retweet-id']}``", inline=True)
+        embed.add_field(name="Users received", value=f"{len(users_recvd['sent'])}", inline=True)
         embed.add_field(name="Users awaiting payment", value=f"{len(airdropConf['airdrop-users'])}", inline=True)
         embed.add_field(name="Receive", value=f"{airdropConf['amount']} {self.wallet['ticker']} each", inline=True)
-        await ctx.send(embed=embed)
-
-    # v1.0 changes made
-    @commands.command()
-    @commands.has_any_role(*roles)
-    async def received(self, ctx):
-        users_recvd = utility.load_json(self.config['sent'])
-        airdropConf = utility.load_json(self.config['airdrop'])
-        embed = discord.Embed(color=self.color)
-        embed.set_thumbnail(url=self.config['thumbnail'])
-        embed.set_author(name="Total users received", icon_url=self.config['icon'])
-        embed.add_field(name="Users received", value=f"{len(users_recvd['sent'])}", inline=True)
-        embed.add_field(name="Amount", value=f"{airdropConf['amount']} {self.wallet['ticker']} each", inline=True)
         await ctx.send(embed=embed)
 
     # v1.0 changes made
@@ -554,8 +544,8 @@ class Airdrop_commands(commands.Cog):
 
         embed1.set_thumbnail(url=self.config['thumbnail'])
         embed1.set_author(name="Analytic commands", icon_url=self.config['icon'])
-        embed1.add_field(name="command", value="$stats\n$dfa_stats\n$received", inline=True)
-        embed1.add_field(name="description", value="currently joined\n2FA verified\nTotal users paid", inline=True)
+        embed1.add_field(name="command", value="$stats\n$dfa_stats", inline=True)
+        embed1.add_field(name="description", value="currently joined\n2FA verified", inline=True)
 
         embed2.set_thumbnail(url=self.config['thumbnail'])
         embed2.set_author(name="Airdrop commands", icon_url=self.config['icon'])
