@@ -29,7 +29,6 @@ class Airdrop_commands(commands.Cog):
 
     roles = utility.load_json('./config/roles.json')['discord-roles']
 
-    # v1.0 changes made
     @commands.command()
     @commands.has_any_role(*roles)
     async def getinfo(self, ctx):
@@ -42,7 +41,6 @@ class Airdrop_commands(commands.Cog):
         embed.add_field(name="Bestblockhash", value=f"{rpc_json.getinfo()['bestblockhash']}", inline=True)
         await ctx.send(embed=embed)
 
-    # v1.0 changes made
     @commands.command()
     @commands.has_any_role(*roles)
     async def confirm(self, ctx):
@@ -53,7 +51,6 @@ class Airdrop_commands(commands.Cog):
         embed.add_field(name="transaction ID", value=f"{rpc_json.txId()}", inline=False)
         await ctx.send(embed=embed)
 
-    # v1.0 changes made
     @commands.command()
     async def join(self, ctx, address):
         # temporary storage point(s)
@@ -253,7 +250,6 @@ class Airdrop_commands(commands.Cog):
             embed.set_author(name="No active airdrop", icon_url=self.config['icon'])
             await ctx.author.send(embed=embed)
 
-    # v1.0 changes made
     @commands.command()
     @commands.has_any_role(*roles)
     async def stats(self, ctx):
@@ -266,22 +262,12 @@ class Airdrop_commands(commands.Cog):
         embed.add_field(name="Active", value=f"``{airdropConf['active']}``", inline=True)
         embed.add_field(name="Twitter bounty", value=f"``{airdropConf['twitter-bounty']}``", inline=True)
         embed.add_field(name="Retweet ID", value=f"``{self.twitter['retweet-id']}``", inline=True)
-        embed.add_field(name="Users received", value=f"{len(users_recvd['sent'])}", inline=True)
+        embed.add_field(name="Users paid", value=f"{len(users_recvd['sent'])}", inline=True)
         embed.add_field(name="Users awaiting payment", value=f"{len(airdropConf['airdrop-users'])}", inline=True)
         embed.add_field(name="Receive", value=f"{airdropConf['amount']} {self.wallet['ticker']} each", inline=True)
+        embed.add_field(name="Scheduled payment", value=f"{cron.schedule()}", inline=True)
         await ctx.send(embed=embed)
 
-    # v1.0 changes made
-    @commands.command()
-    @commands.has_any_role(*roles)
-    async def next_payout(self, ctx):
-        embed = discord.Embed(color=self.color)
-        embed.set_thumbnail(url=self.config['thumbnail'])
-        embed.set_author(name="Next batch payout (twitter-bounty)", icon_url=self.config['icon'])
-        embed.add_field(name="Date/Time", value=f"{cron.schedule()}", inline=True)
-        await ctx.send(embed=embed)
-
-    # v1.0 changes made
     @commands.command()
     @commands.has_any_role(*roles)
     async def end(self, ctx, failsafe):
@@ -314,7 +300,7 @@ class Airdrop_commands(commands.Cog):
                                 embed.set_author(name="The twitter bounty airdrop is now over!", icon_url=self.config['icon'])
                                 embed.add_field(name="participants", value=f"{len(users_recvd['sent'])}", inline=True)
                                 embed.add_field(name="received", value=f"{airdrop_config['amount']} {self.wallet['ticker']} each", inline=True)
-                                await ctx.send(embed=embed)
+                                await self.channel.send(embed=embed)
 
                                 remake_sent = {'sent': []}
                                 remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False, 'twitter-bounty': False}
@@ -338,7 +324,7 @@ class Airdrop_commands(commands.Cog):
                                 embed.set_author(name="The twitter bounty airdrop is now over!", icon_url=self.config['icon'])
                                 embed.add_field(name="participants", value=f"{len(users_recvd['sent']) + len(airdrop_config['airdrop-users'])}", inline=True)
                                 embed.add_field(name="received", value=f"{airdrop_config['amount']} {self.wallet['ticker']} each", inline=True)
-                                await ctx.send(embed=embed)
+                                await self.channel.send(embed=embed)
 
                                 remake_sent = {'sent': []}
                                 remake_airdrop = {'airdrop-users': [], 'max-users': 0, 'amount': 0, 'active': False, 'twitter-bounty': False}
@@ -360,7 +346,7 @@ class Airdrop_commands(commands.Cog):
                             embed.add_field(name="required", value=f"{self.wallet['confirmations']}", inline=True)
                             embed.add_field(name="confirmations", value=f"{rpc_json.txConfirmation()}", inline=True)
                             embed.add_field(name="transaction id", value=f"``{rpc_json.txId()}``", inline=False)
-                            await self.channel.send(embed=embed)
+                            await ctx.send(embed=embed)
 
                     # TWITTER_BOUNTY = FALSE
                     # end accordingly...
@@ -373,7 +359,7 @@ class Airdrop_commands(commands.Cog):
                         embed.set_thumbnail(url=self.config['thumbnail'])
                         embed.set_author(name="Airdrop cancelled", icon_url=self.config['icon'])
                         embed.add_field(name="Information", value="The airdrop has been cancelled", inline=True)
-                        await ctx.send(embed=embed)
+                        await self.channel.send(embed=embed)
 
                 elif failsafe != 1:
                     embed = discord.Embed(color=self.error, title=self.config['title'], url=self.config['url'])
@@ -464,7 +450,6 @@ class Airdrop_commands(commands.Cog):
             embed.add_field(name="Details", value="An airdrop is currently taking place.", inline=True)
             await self.channel.send(embed=embed)
 
-    # v1.0 changes made
     @commands.command()
     @commands.cooldown(1, 150)
     @commands.has_any_role(*roles)
@@ -501,7 +486,6 @@ class Airdrop_commands(commands.Cog):
                             await self.channel.send(embed=embed)
 
                         if not data['twitter-bounty']:
-
                             embed = discord.Embed(color=self.color, timestamp=datetime.utcnow())
                             embed.set_thumbnail(url=self.config['thumbnail'])
                             embed.set_author(name="The airdrop is now complete!", icon_url=self.config['icon'])
@@ -535,7 +519,6 @@ class Airdrop_commands(commands.Cog):
                     embed.add_field(name="transaction id", value=f"``{rpc_json.txId()}``", inline=False)
                     await self.channel.send(embed=embed)
 
-    # v1.0 changes made
     @commands.command()
     @commands.has_any_role(*roles)
     async def cmd(self, ctx):
@@ -555,7 +538,6 @@ class Airdrop_commands(commands.Cog):
         await ctx.send(embed=embed2)
         await ctx.send(embed=embed1)
 
-    # v1.0 changes made
     @commands.command()
     @commands.has_any_role(*roles)
     async def set_retweet(self,ctx, id: str):
@@ -569,8 +551,6 @@ class Airdrop_commands(commands.Cog):
         embed.add_field(name="complete!", value="retweet-id has now been updated", inline=True)
         await ctx.send(embed=embed)
 
-    # v1.0 changes made
-    # bitgreen 1.4.0.2 wallet changes applied
     @commands.command()
     @commands.has_any_role(*roles)
     async def getbalance(self, ctx):
@@ -604,7 +584,7 @@ class Airdrop_commands(commands.Cog):
             embed = discord.Embed(color=self.color)
             embed.set_thumbnail(url=self.config['thumbnail'])
             embed.set_author(name="Address not specified", icon_url=self.config['icon'])
-            embed.add_field(name="Command", value="`$join Ad4H4oUUShhRzDNGYRY8eGGHMipaVxPkYr`", inline=True)
+            embed.add_field(name="Command", value="`$join GPWb9jprtTkH9Qj5T4xHZiQDkHHh9v8xZa`", inline=True)
             await ctx.author.send(embed=embed)
 
     @end.error
